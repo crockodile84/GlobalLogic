@@ -38,10 +38,7 @@ public class HttpRequestMethod {
                 break;
             case GET:
                 HttpGet get = new HttpGet(endpoint);
-                get.setHeader("Authorization:", "Basic dXNlcjp1c2Vy");
-                //get.setHeader("Authorization","dXNlcjpwYXNzd2Q=");
                 response = client.execute(get);
-                System.out.println(response);
                 break;
             case DELETE:
                 HttpDelete delete = new HttpDelete(endpoint);
@@ -76,6 +73,22 @@ public class HttpRequestMethod {
                 break;
         }
         BufferedReader rd = new BufferedReader (new InputStreamReader(response.getEntity().getContent()));
+        StringBuilder builder = new StringBuilder();
+        String line = "";
+        while ((line = rd.readLine()) != null) {
+            builder = builder.append(line);
+        }
+        line = String.valueOf(builder);
+        return line;
+    }
+
+    public String getBasicAuthRequest(String endpoint) throws IOException {
+        HttpClient client = HttpClients.createDefault();
+        HttpResponse response = null;
+        HttpGet get = new HttpGet(endpoint);
+        get.setHeader("Authorization: ", "Basic " + "dXNlcjpwYXNzd2Q=");
+        response = client.execute(get);
+        BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
         StringBuilder builder = new StringBuilder();
         String line = "";
         while ((line = rd.readLine()) != null) {
